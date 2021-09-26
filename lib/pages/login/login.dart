@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food/pages/home/home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -10,6 +9,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var pin ="123456";
   var password = "";
 
   @override
@@ -122,11 +122,12 @@ class _LoginPageState extends State<LoginPage> {
         password = password.substring(0, password.length - 1);
       } else if (num >= 0) {
         password = password + "$num";
-        if (password == "123456") {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => Home()),
-          );
+        if (password == pin) {
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => Home()),
+          // );
+          Navigator.pushReplacementNamed(context,"/home");
         } else if (password.length == 6) {
           _showMaterialDialog("ERROR", "Invalid PIN Please try again");
           password = "";
