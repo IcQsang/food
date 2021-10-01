@@ -1,67 +1,120 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  static const routeName = '/home';
+
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomeState extends State<Home> {
+class _HomePageState extends State<HomePage> {
+  var _subPageIndex = 0;
+  var _selectedBottomNavIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("home"),
+        title: Text('FLUTTER FOOD'),
       ),
       drawer: Drawer(
-          child: Drawer(
-            // Add a ListView to the drawer. This ensures the user can scroll
-            // through the options in the drawer if there isn't enough vertical
-            // space to fit everything.
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: EdgeInsets.zero,
-              children: [
-                const DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.red,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(40.0),
+                      child: Container(
+                        width: 80.0,
+                        height: 80.0,
+                        child: Image.asset('assets/images/profile.png'),
+                      )
+                  )
+                  ,
+                  Text(
+                    'Promlert Lovichit',
+                    style: TextStyle(fontSize: 20.0, color: Colors.white),
                   ),
-                  child: Text('Drawer Header'),
-                ),
-                ListTile(
-                  title: const Text('Item 1'),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
-                ListTile(
-                  title: const Text('Item 2'),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                  },
-                ),
-              ],
+                ],
+              ),
             ),
-          )
+            ListTile(
+              title: _buildDrawerItem(Icon(Icons.person), 'PAGE 1'),
+              onTap: () => _showSubPage(1),
+            ),
+            ListTile(
+              title: _buildDrawerItem(Icon(Icons.person), 'PAGE 2'),
+              onTap: () => _showSubPage(2),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+          ),
+        ],
+        currentIndex: _selectedBottomNavIndex,
+        onTap: (index) {
+          setState(() {
+            _selectedBottomNavIndex = index;
+          });
+        },
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
-            colors: [
-              Colors.lightBlueAccent,
-              Colors.greenAccent,
-            ],
-          ),
-        ),
-        child: Center(
-          child: Text("HOME"),
-        ),
+        child: _buildSubPage(),
       ),
+    );
+  }
+
+  _showSubPage(int index) {
+    setState(() {
+      _subPageIndex = index;
+    });
+    Navigator.of(context).pop();
+  }
+
+  Widget _buildSubPage() {
+    switch (_subPageIndex) {
+      case 0: // home page
+        return Center(
+          child: Text('THIS IS A HOME PAGE',)
+        );
+      case 1:
+        return Center(
+          child: Text('PAGE 1'),
+        );
+      case 2:
+        return Center(
+          child: Text('PAGE 2'),
+        );
+      default:
+        return SizedBox.shrink();
+    }
+  }
+
+  Row _buildDrawerItem(Widget icon, String title) {
+    return Row(
+      children: [
+        icon,
+        SizedBox(width: 8.0),
+        Text(title),
+      ],
     );
   }
 }

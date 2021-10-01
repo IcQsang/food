@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       routes: {
         '/login': (context) => const LoginPage(),
-        '/home': (context) => const Home(),
+        '/home': (context) => const HomePage(),
       },
       initialRoute: '/login',
     );
