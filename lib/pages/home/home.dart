@@ -12,13 +12,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var _subPageIndex = 0;
-  var _selectedBottomNavIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FLUTTER FOOD'),
+        backgroundColor: Colors.purple,
+        title: _subPageIndex==1?Text('FOOD'):_subPageIndex==2?Text('PROFILE'):Text('FLUTTER FOOD'),
       ),
       drawer: Drawer(
         child: ListView(
@@ -26,55 +26,48 @@ class _HomePageState extends State<HomePage> {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.red,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.purple,
+            Colors.purpleAccent,
+          ],)
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                      borderRadius: BorderRadius.circular(40.0),
+                      borderRadius: BorderRadius.circular(100000.0),
                       child: Container(
-                        width: 80.0,
-                        height: 80.0,
+                        width: 100.0,
+                        height: 100.0,
                         child: Image.asset('assets/images/profile.png'),
-                      )
-                  )
-                  ,
+                      )),
                   Text(
                     'Promlert Lovichit',
                     style: TextStyle(fontSize: 20.0, color: Colors.white),
+                  ),
+                  Text(
+                    'promlert@gmail.com',
+                    style: TextStyle(fontSize: 10.0, color: Colors.grey),
                   ),
                 ],
               ),
             ),
             ListTile(
-              title: _buildDrawerItem(Icon(Icons.person), 'PAGE 1'),
+              title: _buildDrawerItem(Icon(Icons.fastfood,color: _subPageIndex==1?Colors.purple:Colors.black,), 'Food'),
               onTap: () => _showSubPage(1),
+              selected: _subPageIndex==1,
             ),
             ListTile(
-              title: _buildDrawerItem(Icon(Icons.person), 'PAGE 2'),
+              title: _buildDrawerItem(Icon(Icons.person,color: _subPageIndex==2?Colors.purple:Colors.black,), 'Profile'),
               onTap: () => _showSubPage(2),
+                selected:_subPageIndex==2,
             ),
           ],
+
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _selectedBottomNavIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedBottomNavIndex = index;
-          });
-        },
       ),
       body: Container(
         child: _buildSubPage(),
@@ -93,16 +86,13 @@ class _HomePageState extends State<HomePage> {
     switch (_subPageIndex) {
       case 0: // home page
         return Center(
-          child: Text('THIS IS A HOME PAGE',)
-        );
+            child: Text(
+          'THIS IS A HOME PAGE',
+        ));
       case 1:
-        return Center(
-          child: Text('PAGE 1'),
-        );
+        return FoodPage();
       case 2:
-        return Center(
-          child: Text('PAGE 2'),
-        );
+        return ProfilePage();
       default:
         return SizedBox.shrink();
     }
@@ -115,6 +105,79 @@ class _HomePageState extends State<HomePage> {
         SizedBox(width: 8.0),
         Text(title),
       ],
+    );
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body:Center(
+        child: Column(
+        children: [
+          ClipRRect(
+              borderRadius: BorderRadius.circular(1000000000000000000.0),
+              child: Container(
+                width: 400.0,
+                height: 400.0,
+                child: Image.asset('assets/images/profile.png'),
+              )),
+          Text(
+            'Promlert Lovichit',
+            style: TextStyle(fontSize: 20.0, color: Colors.black),
+          ),
+          Text(
+            'promlert@gmail.com',
+            style: TextStyle(fontSize: 10.0, color: Colors.black),
+          ),
+        ],
+    ),
+      ),
+    );
+  }
+}
+
+class FoodPage extends StatefulWidget {
+  const FoodPage({Key? key}) : super(key: key);
+
+  @override
+  _FoodPageState createState() => _FoodPageState();
+}
+
+class _FoodPageState extends State<FoodPage> {
+  @override
+  int _selectedBottomNavIndex = 0;
+
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+          child: _selectedBottomNavIndex == 0
+              ? Text("Food Menu")
+              : Text("Your Order")),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book),
+            label: 'Menu',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Your Order',
+          ),
+        ],
+        currentIndex: _selectedBottomNavIndex,
+        selectedItemColor: Colors.purple,
+        onTap: (index) {
+          setState(() {
+            _selectedBottomNavIndex = index;
+          });
+        },
+      ),
     );
   }
 }
