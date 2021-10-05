@@ -5,4 +5,9 @@ class FoodItem {
   String image;
 
   FoodItem(this.id, this.name, this.price, this.image);
+  @override
+  String toString() {
+    var out ="ชื่อเมนู:$name\nราคา: $price บาท";
+    return out;
+  }
 }
