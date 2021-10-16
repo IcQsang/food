@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food/main.dart';
 import 'package:food/pages/food/fooditem.dart';
 
 class Detail extends StatelessWidget {
@@ -16,8 +17,7 @@ class Detail extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-              child: Image.asset('assets/images/${item.image}')),
+               Image.asset('assets/images/${item.image}',fit: BoxFit.cover,),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text("$item" ,style: TextStyle(fontSize: 30),),

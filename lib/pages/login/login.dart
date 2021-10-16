@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,7 +12,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var pin ="123456";
   var password = "";
 
   @override
@@ -33,7 +35,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: Center(
                       child: Column(
                 children: [
-                  Icon(Icons.lock_outline,size: 100,),
+                  Icon(
+                    Icons.lock_outline,
+                    size: 100,
+                  ),
                   Text(
                     "Login",
                     style: TextStyle(fontSize: 40),
@@ -116,25 +121,51 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void tap(int num) {
+  void tap(int num) async {
     setState(() {
       if (num == -1 && password.length - 1 != -1) {
         password = password.substring(0, password.length - 1);
       } else if (num >= 0) {
         password = password + "$num";
-        if (password == pin) {
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => Home()),
-          // );
-          Navigator.pushReplacementNamed(context,"/home");
-        } else if (password.length == 6) {
-          _showMaterialDialog("ERROR", "Invalid PIN Please try again");
-          password = "";
+        // if (password == pin) {
+        //   // Navigator.pushReplacement(
+        //   //   context,
+        //   //   MaterialPageRoute(builder: (context) => Home()),
+        //   // );
+        //   Navigator.pushReplacementNamed(context, "/home");
+        // } else if (password.length == 6) {
+        //   _showMaterialDialog("ERROR", "Invalid PIN Please try again");
+        //   password = "";
+        // }
+        if (password.length == 6) {
+          var check = checkPIN(password);
+          check.then((value) {
+            if (value) {
+              Navigator.pushReplacementNamed(context, "/home");
+            } else
+              password = "";
+          });
         }
       }
     });
+    setState(() {});
     print(password);
+  }
+
+  Future<bool> checkPIN(String pin) async {
+    var response = await http.post(
+      Uri.parse('https://cpsu-test-api.herokuapp.com/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'pin': pin,
+      }),
+    );
+    print(response.body);
+    Map map = json.decode(response.body);
+    print(map["data"]);
+    return map["data"];
   }
 
   void _showMaterialDialog(String title, String msg) {

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food/pages/food/food.dart';
 import 'package:food/pages/profile/profile.dart';
+
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
@@ -109,6 +112,7 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
+
 }
 
 
